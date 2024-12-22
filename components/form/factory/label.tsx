@@ -5,12 +5,15 @@ import {
 
 type LabelProps = {
   labelText?: string;
+  labelC?: string;
 };
 
-const Label = ({ labelText }: LabelProps) => {
+const Label = ({ labelText, labelC = "" }: LabelProps) => {
   return (
     <FormControlLabel>
-      <FormControlLabelText>{labelText}</FormControlLabelText>
+      <FormControlLabelText className={`${labelC}`}>
+        {labelText}
+      </FormControlLabelText>
     </FormControlLabel>
   );
 };

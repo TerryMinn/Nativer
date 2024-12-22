@@ -12,6 +12,11 @@ export type FormProps<T extends FieldValues = FieldValues> = {
   control?: Control<T>;
   name: keyof T;
   placeholder?: string;
+  classNames?: {
+    inputC?: string;
+    labelC?: string;
+    errorC?: string;
+  };
 };
 
 const Input = <T extends FieldValues>({

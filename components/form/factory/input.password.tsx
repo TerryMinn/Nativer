@@ -3,8 +3,8 @@ import { Input, InputField, InputSlot } from "@/components/ui/input";
 import { FormProps } from "../input";
 import { Controller, FieldValues, Path } from "react-hook-form";
 import Label from "./label";
-import IsInvalid from "./IsInvalid";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import IsInvalid from "./isInvalid";
 
 const InputPassword = <T extends FieldValues>({
   label,
@@ -12,8 +12,12 @@ const InputPassword = <T extends FieldValues>({
   control,
   placeholder,
   errors,
+  classNames = { inputC: "", labelC: "" },
 }: FormProps<T>) => {
+  const { inputC, labelC } = classNames!;
+
   const [show, setShow] = useState<boolean>(false);
+
   return (
     <>
       <Label labelText={label} />
@@ -22,7 +26,7 @@ const InputPassword = <T extends FieldValues>({
         name={name as Path<T>}
         control={control}
         render={({ field: { onBlur, onChange, value } }) => (
-          <Input>
+          <Input className={`pr-3 pl-1 h-12 ${inputC}`}>
             <InputField
               onChangeText={onChange}
               onBlur={onBlur}

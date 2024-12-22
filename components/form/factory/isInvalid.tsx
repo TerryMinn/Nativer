@@ -6,12 +6,16 @@ import {
   FormControlErrorText,
 } from "@/components/ui/form-control";
 
-type IsInvalidProps = {} & Pick<FormProps, "errors" | "name">;
+type IsInvalidProps = {} & Pick<FormProps, "errors" | "name" | "classNames">;
 
-const IsInvalid = ({ errors, name }: IsInvalidProps) => {
+const IsInvalid = ({
+  errors,
+  name,
+  classNames = { labelC: "" },
+}: IsInvalidProps) => {
   return (
     <FormControlError>
-      <FormControlErrorText>
+      <FormControlErrorText className={`${classNames.labelC}`}>
         {typeof errors[name]?.message === "string" ? errors[name]?.message : ""}
       </FormControlErrorText>
     </FormControlError>

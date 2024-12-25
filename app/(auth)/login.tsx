@@ -12,6 +12,7 @@ import Input from "@/components/form/input";
 import { HStack } from "@/components/ui/hstack";
 import { Link, LinkText } from "@/components/ui/link";
 import { Text } from "@/components/ui/text";
+import { router } from "expo-router";
 
 const Login = () => {
   const {
@@ -35,7 +36,6 @@ const Login = () => {
           <Heading size="xl" className="mt-5 mb-8">
             Sign In to your account
           </Heading>
-          {/* Login Panel */}{" "}
           <VStack space="xl">
             <Input
               errors={errors}
@@ -79,7 +79,12 @@ const Login = () => {
 
         <VStack>
           <Text className="font-heading uppercase text-center">Or</Text>
-          <Button className="h-14 rounded-lg mt-3 bg-neutral-200 ">
+          <Button
+            onPress={() => {
+              router.push("/register");
+            }}
+            className="h-14 rounded-lg mt-3 bg-neutral-200 "
+          >
             <ButtonText className="text-black">Create an account</ButtonText>
           </Button>
 

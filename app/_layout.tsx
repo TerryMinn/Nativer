@@ -14,11 +14,13 @@ import "react-native-reanimated";
 
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { PrimaryFont, SecondaryFont } from "@/constants/Fonts";
+import useAuthStore from "@/features/user/store/useAuthStore";
+import { router } from "expo-router";
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
+  const { session } = useAuthStore();
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     ...SecondaryFont,
@@ -27,7 +29,10 @@ export default function RootLayout() {
 
   useEffect(() => {
     if (loaded) {
-      SplashScreen.hideAsync();
+      if (session.isAuth) {
+        router.replace("/(home)");
+        SplashScreen.hideAsync();
+      }
     }
   }, [loaded]);
 

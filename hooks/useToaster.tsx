@@ -44,7 +44,13 @@ const useToaster = (options: ToastHookType = {}) => {
                   style={{ color: "#17adfc" }}
                   className="font-semibold line-clamp-1"
                 >
-                  {title}
+                  {typeof title === "object"
+                    ? `${title[1]}`.length > 30
+                      ? `${title[1]}`.slice(0, 30) + "..."
+                      : title[1]
+                    : title.length > 30
+                    ? title.slice(0, 30) + "..."
+                    : title}
                 </ToastTitle>
               </VStack>
             </View>
@@ -66,7 +72,13 @@ const useToaster = (options: ToastHookType = {}) => {
                   style={{ color: "#2DCF63" }}
                   className="font-semibold line-clamp-1"
                 >
-                  {title}
+                  {typeof title === "object"
+                    ? `${title[1]}`.length > 30
+                      ? `${title[1]}`.slice(0, 30) + "..."
+                      : title[1]
+                    : title.length > 30
+                    ? title.slice(0, 30) + "..."
+                    : title}
                 </ToastTitle>
               </VStack>
             </View>
@@ -81,11 +93,17 @@ const useToaster = (options: ToastHookType = {}) => {
       case "error":
         return (
           <>
-            <View className="flex flex-row items-center gap-3">
+            <View className="flex flex-row items-center gap-5">
               <Icon as={CloseCircleIcon} className="stroke-error-500 mt-0.5" />
               <VStack space="xs">
-                <ToastTitle className="font-semibold text-error-500 line-clamp-1">
-                  {title}
+                <ToastTitle className="font-semibold text-error-500">
+                  {typeof title === "object"
+                    ? `${title[1]}`.length > 30
+                      ? `${title[1]}`.slice(0, 30) + "..."
+                      : title[1]
+                    : title.length > 30
+                    ? title.slice(0, 30) + "..."
+                    : title}
                 </ToastTitle>
               </VStack>
             </View>
@@ -105,9 +123,15 @@ const useToaster = (options: ToastHookType = {}) => {
               <VStack space="xs">
                 <ToastTitle
                   style={{ color: "#efa92e" }}
-                  className="font-semibold line-clamp-1"
+                  className="font-semibold line-clamp-1 p-4"
                 >
-                  {title}
+                  {typeof title === "object"
+                    ? `${title[1]}`.length > 30
+                      ? `${title[1]}`.slice(0, 30) + "..."
+                      : title[1]
+                    : title.length > 30
+                    ? title.slice(0, 30) + +"..."
+                    : title}
                 </ToastTitle>
               </VStack>
             </View>
@@ -127,7 +151,6 @@ const useToaster = (options: ToastHookType = {}) => {
   };
 
   const toaster = (type: ToastType, title: string) => {
-    console.log("Hello");
     if (!toast.isActive(toastId)) {
       const newId = Math.random();
       setToastId(newId.toString());
@@ -143,7 +166,7 @@ const useToaster = (options: ToastHookType = {}) => {
               action={type}
               variant="outline"
               nativeID={uniqueToastId}
-              className=" gap-6  w-full shadow max-w-[443px] flex-row justify-between rounded-full"
+              className="gap-6 shadow  flex-row justify-between rounded-full"
             >
               {toastRender(type, title, id)}
             </Toast>

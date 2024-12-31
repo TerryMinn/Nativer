@@ -2,25 +2,36 @@ import { create } from "zustand";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { persist } from "zustand/middleware";
 import { AuthI } from "../types/auth.type";
+import { AUTH_STORE } from "@/constants/Service";
 
 const useAuthStore = create(
   persist<AuthI>(
     (set) => ({
-      user: {
+      session: {
         isAuth: false,
         profile: {
-          picture: null,
-          username: null,
+          picture: undefined,
+          username: undefined,
         },
+        token: undefined,
       },
-      setUser: (user) => set({ user }),
+      setSession: (session) => set({ session }),
       logout: () =>
         set({
-          user: { isAuth: false, profile: { picture: null, username: null } },
+          session: {
+            isAuth: false,
+            token: undefined,
+            profile: {
+              picture: undefined,
+              username: undefined,
+              gender: undefined,
+              date_of_birth: undefined,
+            },
+          },
         }),
     }),
     {
-      name: "app-auth-storage",
+      name: AUTH_STORE,
       storage: {
         getItem: async (name) => {
           const item = await AsyncStorage.getItem(name);

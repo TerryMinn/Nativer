@@ -1,19 +1,26 @@
 import Container from "@/components/container";
 import Input from "@/components/form/input";
 import KeyboardAvoidingBox from "@/components/keyboard-avoiding-box";
-import { Button, ButtonText } from "@/components/ui/button";
+import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
 import { Heading } from "@/components/ui/heading";
 import { LinkText } from "@/components/ui/link";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
 import Header from "@/features/user/components/header";
+import { registerService } from "@/features/user/service/auth.service";
+import useAuthStore from "@/features/user/store/useAuthStore";
 import { IRegister } from "@/features/user/types/user.type";
 import { registerSchema } from "@/features/user/utils/schema";
+import useToaster from "@/hooks/useToaster";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
+import axios, { HttpStatusCode } from "axios";
+import { router } from "expo-router";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import colors from "tailwindcss/colors";
 
 const Register = () => {
+  const [loading, setLoading] = useState<boolean>(false);
   const {
     control,
     handleSubmit,
@@ -28,11 +35,25 @@ const Register = () => {
     },
     resolver: zodResolver(registerSchema),
   });
+  const { toaster } = useToaster();
 
   const selectedValues = watch("accept_rule", []);
 
-  const onSubmit = (data: IRegister) => {
-    console.log(data);
+  const onSubmit = async (data: IRegister) => {
+    setLoading(true);
+    try {
+      const raw = await registerService(data);
+      if ((raw.data.statusCode = HttpStatusCode.Created)) {
+        router.replace("/login");
+        toaster("success", "Account created successfully");
+      }
+    } catch (errors) {
+      if (axios.isAxiosError(errors)) {
+        toaster("error", errors.response?.data.message);
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -99,6 +120,7 @@ const Register = () => {
                   className="h-16 rounded-full mt-3"
                   isDisabled={selectedValues.length === 0}
                 >
+                  {loading && <ButtonSpinner color={colors.gray[400]} />}
                   <ButtonText className="text-lg">Continue</ButtonText>
                 </Button>
 

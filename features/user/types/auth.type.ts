@@ -1,15 +1,18 @@
 export interface AuthStateI {
-  user: {
+  session: {
     isAuth: boolean;
+    token: string | undefined;
     profile: {
-      picture: string | null;
-      username: string | null;
+      picture: string | undefined;
+      username: string | undefined;
+      gender?: string | undefined;
+      date_of_birth?: string | undefined;
     };
   };
 }
 
 export interface AuthActionI {
-  setUser: (user: AuthStateI["user"]) => void;
+  setSession: (session: AuthStateI["session"]) => void;
   logout: () => void;
 }
 

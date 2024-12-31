@@ -16,10 +16,12 @@ import { router } from "expo-router";
 import KeyboardAvoidingBox from "@/components/keyboard-avoiding-box";
 import { loginService } from "@/features/user/service/auth.service";
 import colors from "tailwindcss/colors";
-import axios from "axios";
+import axios, { HttpStatusCode } from "axios";
 import useToaster from "@/hooks/useToaster";
+import useAuthStore from "@/features/user/store/useAuthStore";
 
 const Login = () => {
+  const { setSession } = useAuthStore();
   const [loading, setLoading] = useState<boolean>(false);
   const {
     control,
@@ -36,8 +38,19 @@ const Login = () => {
     setLoading(true);
     try {
       const raw = await loginService(data);
-      console.log(raw);
+      if (raw.data.statusCode === HttpStatusCode.Created) {
+        setSession({
+          isAuth: true,
+          token: raw.data.data.token,
+          profile: {
+            picture: raw.data.data?.profile?.picture,
+            username: raw.data.data?.profile?.username,
+          },
+        });
+        router.replace("/(home)");
+      }
     } catch (errors) {
+      console.log(errors);
       if (axios.isAxiosError(errors)) {
         toaster("error", errors.response?.data.message);
       }

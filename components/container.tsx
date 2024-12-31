@@ -9,7 +9,7 @@ type ContainerProps = {
 const Container = ({ children }: ContainerProps) => {
   return (
     <SafeAreaView className="w-full h-full">
-      <Box className="flex-1 px-5">{children}</Box>
+      <Box className="flex-1 px-5 pt-3">{children}</Box>
     </SafeAreaView>
   );
 };

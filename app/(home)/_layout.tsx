@@ -28,6 +28,8 @@ const HomeLayout = ({}: HomeLayoutProps) => {
     });
   }, [data]);
 
+  console.log(error);
+
   if (error) {
     logout();
     router.replace("/login");
@@ -42,12 +44,13 @@ const HomeLayout = ({}: HomeLayoutProps) => {
       screenOptions={{
         tabBarActiveTintColor: "black",
         headerShown: false,
+
         tabBarStyle: {
           backgroundColor: "#f8f8f8",
           borderTopWidth: 1,
           borderTopColor: "#ccc",
           paddingTop: 10,
-          height: 75,
+          height: 85,
         },
       }}
     >

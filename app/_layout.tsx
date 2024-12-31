@@ -31,8 +31,8 @@ export default function RootLayout() {
     if (loaded) {
       if (session.isAuth) {
         router.replace("/(home)");
-        SplashScreen.hideAsync();
       }
+      SplashScreen.hideAsync();
     }
   }, [loaded]);
 

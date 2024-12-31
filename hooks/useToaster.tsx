@@ -94,9 +94,13 @@ const useToaster = (options: ToastHookType = {}) => {
         return (
           <>
             <View className="flex flex-row items-center gap-5">
-              <Icon as={CloseCircleIcon} className="stroke-error-500 mt-0.5" />
+              <Icon
+                as={CloseCircleIcon}
+                color="#FF0000"
+                className="stroke-error-500 mt-0.5"
+              />
               <VStack space="xs">
-                <ToastTitle className="font-semibold text-error-500">
+                <ToastTitle className="font-semibold text-red-500">
                   {typeof title === "object"
                     ? `${title[1]}`.length > 30
                       ? `${title[1]}`.slice(0, 30) + "..."
@@ -110,7 +114,7 @@ const useToaster = (options: ToastHookType = {}) => {
 
             <HStack className="min-[450px]:gap-3 gap-1 justify-center items-center">
               <Pressable onPress={() => toast.close(id)}>
-                <Icon as={CloseIcon} className="stroke-error-500" size={"xs"} />
+                <Icon as={CloseIcon} color="#FF0000" size={"xs"} />
               </Pressable>
             </HStack>
           </>

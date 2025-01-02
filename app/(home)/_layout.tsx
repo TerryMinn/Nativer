@@ -1,43 +1,17 @@
 import React, { useEffect } from "react";
 import { router, Tabs } from "expo-router";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
-import useSWR from "swr";
-import api_client from "@/service/api-service";
-import { IProfile } from "@/features/user/types/user.type";
-import Loading from "@/components/loading";
 import useAuthStore from "@/features/user/store/useAuthStore";
 type HomeLayoutProps = {};
 
 const HomeLayout = ({}: HomeLayoutProps) => {
-  const { setSession, session, logout } = useAuthStore();
-  const { data, isLoading, error } = useSWR<IProfile>(
-    "/user/profile",
-    api_client
-  );
-  const user_data = data?.data;
+  const { session } = useAuthStore();
 
   useEffect(() => {
-    setSession({
-      ...session,
-      profile: {
-        username: user_data?.data?.name,
-        picture: user_data?.data?.profile?.picture,
-        gender: user_data?.data?.profile?.gender,
-        date_of_birth: user_data?.data?.profile?.date_of_birth,
-      },
-    });
-  }, [data]);
-
-  console.log(error);
-
-  if (error) {
-    logout();
-    router.replace("/login");
-  }
-
-  if (isLoading) {
-    return <Loading />;
-  }
+    if (!session.isAuth) {
+      router.replace("/login");
+    }
+  }, [session]);
 
   return (
     <Tabs

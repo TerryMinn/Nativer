@@ -5,8 +5,6 @@ export interface AuthStateI {
     profile: {
       picture: string | undefined;
       username: string | undefined;
-      gender?: string | undefined;
-      date_of_birth?: string | undefined;
     };
   };
 }

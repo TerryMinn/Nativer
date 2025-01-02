@@ -24,8 +24,6 @@ const useAuthStore = create(
             profile: {
               picture: undefined,
               username: undefined,
-              gender: undefined,
-              date_of_birth: undefined,
             },
           },
         }),

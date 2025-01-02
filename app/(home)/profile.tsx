@@ -9,6 +9,7 @@ type ProfileProps = {};
 
 const Profile = (props: ProfileProps) => {
   const { logout } = useAuthStore();
+
   return (
     <Container>
       <VStack>

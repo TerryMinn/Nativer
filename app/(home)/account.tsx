@@ -26,8 +26,8 @@ const Profile = (props: ProfileProps) => {
       <VStack className="justify-between h-full">
         {/* Profile */}
         <VStack className="mt-10">
-          <Center>
-            <Avatar size="lg">
+          <Center className="gap-2">
+            <Avatar size="xl">
               <AvatarFallbackText>Jane Doe</AvatarFallbackText>
               <AvatarImage
                 source={
@@ -38,8 +38,12 @@ const Profile = (props: ProfileProps) => {
               />
               <AvatarBadge />
             </Avatar>
-            <Heading className="font-heading text-2xl">Jane Doe</Heading>
-            <Text className="font-body text-sm">janedoe@gmail.com</Text>
+            <Center>
+              <Heading className="font-heading text-3xl">
+                {profile.username}
+              </Heading>
+              <Text className="font-body text-sm">{profile.email}</Text>
+            </Center>
           </Center>
         </VStack>
 

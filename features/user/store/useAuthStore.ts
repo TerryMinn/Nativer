@@ -12,6 +12,7 @@ const useAuthStore = create(
         profile: {
           picture: undefined,
           username: undefined,
+          email: undefined,
         },
         token: undefined,
       },
@@ -24,6 +25,7 @@ const useAuthStore = create(
             profile: {
               picture: undefined,
               username: undefined,
+              email: undefined,
             },
           },
         }),

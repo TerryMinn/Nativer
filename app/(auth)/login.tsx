@@ -39,12 +39,17 @@ const Login = () => {
     try {
       const raw = await loginService(data);
       if (raw.data.statusCode === HttpStatusCode.Created) {
+        const {
+          user: { profile, name, email },
+          token,
+        } = raw.data.data;
         setSession({
           isAuth: true,
-          token: raw.data.data.token,
+          token: token,
           profile: {
-            picture: raw.data.data?.profile?.picture,
-            username: raw.data.data?.profile?.username,
+            picture: profile.picture,
+            username: name,
+            email: email,
           },
         });
         router.replace("/(home)");

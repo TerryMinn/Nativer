@@ -21,7 +21,6 @@ export interface IProfile {
         gender?: string;
         date_of_birth?: string;
       };
-      device?: [];
       oauthProviders?: [];
     };
   };

@@ -13,17 +13,18 @@ import {
 import { Center } from "@/components/ui/center";
 import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
-import { Pressable } from "react-native";
+import { Alert, Pressable } from "react-native";
 import { Upload } from "lucide-react-native";
 import * as ImagePicker from "expo-image-picker";
 import { uploadPhotos } from "@/service/media.service";
-import axios from "axios";
+import axios, { HttpStatusCode } from "axios";
 import useToaster from "@/hooks/useToaster";
+import { updateProfile } from "@/features/user/service/user.service";
 
 type ProfileProps = {};
 
 const Profile = (props: ProfileProps) => {
-  const { logout, session } = useAuthStore();
+  const { logout, session, setSession } = useAuthStore();
 
   const { profile } = session;
 
@@ -49,7 +50,29 @@ const Profile = (props: ProfileProps) => {
           name: result.assets[0].uri.split("/").pop(),
         } as unknown as Blob);
 
-        const fileRes = await uploadPhotos(formData);
+        const { data } = await uploadPhotos(formData);
+
+        if (data.statusCode === HttpStatusCode.Ok) {
+          // @TODO: gender and dateofbirth for profile setting up
+          const profile = {
+            // gender: session.profile.gender,
+            // date_of_birth: session.profile.date_of_birth,
+            picture: data.data.original,
+          };
+
+          const res = await updateProfile({ profile });
+
+          if (res.data.statusCode === HttpStatusCode.Created) {
+            setSession({
+              ...session,
+              profile: {
+                ...session.profile,
+                picture: data.data.original,
+              },
+            });
+            toaster("success", "Profile updated successfully");
+          }
+        }
       }
     } catch (errors) {
       if (axios.isAxiosError(errors)) {

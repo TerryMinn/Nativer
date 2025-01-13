@@ -9,7 +9,7 @@ type Props = {};
 const Header = (props: Props) => {
   return (
     <Box className="w-full my-5">
-      <Pressable onPress={() => router.back()}>
+      <Pressable onPress={() => router.replace("/")}>
         <Ionicons name="arrow-back-outline" size={24} color="black" />
       </Pressable>
     </Box>

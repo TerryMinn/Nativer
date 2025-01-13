@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Container from "@/components/container";
 import { VStack } from "@/components/ui/vstack";
 import { Box } from "@/components/ui/box";
-import { Button, ButtonText } from "@/components/ui/button";
+import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
 import useAuthStore from "@/features/user/store/useAuthStore";
 import {
   Avatar,
@@ -25,12 +25,14 @@ type ProfileProps = {};
 
 const Profile = (props: ProfileProps) => {
   const { logout, session, setSession } = useAuthStore();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { profile } = session;
 
   const { toaster } = useToaster();
 
   const handlePickImage = async () => {
+    setIsLoading(true);
     try {
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ["images", "videos"],
@@ -79,6 +81,8 @@ const Profile = (props: ProfileProps) => {
         console.log(errors.response?.data.message);
         toaster("error", errors.response?.data.message);
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -101,9 +105,15 @@ const Profile = (props: ProfileProps) => {
                 onPress={handlePickImage}
                 className="absolute bottom-0 right-1"
               >
-                <Box className="bg-white p-1 rounded-full border border-gray-400">
-                  <Upload color={"black"} size={12} />
-                </Box>
+                {isLoading ? (
+                  <Box className="bg-white p-3 rounded-full border border-gray-400">
+                    <ButtonSpinner size={1} />
+                  </Box>
+                ) : (
+                  <Box className="bg-white p-1 rounded-full border border-gray-400">
+                    <Upload color={"black"} size={14} />
+                  </Box>
+                )}
               </Pressable>
             </Avatar>
             <Center>

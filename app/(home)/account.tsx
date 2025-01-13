@@ -16,28 +16,46 @@ import { Text } from "@/components/ui/text";
 import { Pressable } from "react-native";
 import { Upload } from "lucide-react-native";
 import * as ImagePicker from "expo-image-picker";
+import { uploadPhotos } from "@/service/media.service";
+import axios from "axios";
+import useToaster from "@/hooks/useToaster";
 
 type ProfileProps = {};
 
 const Profile = (props: ProfileProps) => {
   const { logout, session } = useAuthStore();
-  const [image, setImage] = useState<string | null>(null);
 
   const { profile } = session;
 
+  const { toaster } = useToaster();
+
   const handlePickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ["images", "videos"],
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
+    try {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ["images", "videos"],
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
 
-    console.log(result);
+      if (!result.canceled) {
+        const formData = new FormData();
 
-    if (!result.canceled) {
-      setImage(result.assets[0].uri);
-      console.log(result);
+        console.log(result.assets[0].uri.split("/").pop());
+
+        formData.append("file", {
+          uri: result.assets[0].uri,
+          type: result.assets[0].type,
+          name: result.assets[0].uri.split("/").pop(),
+        } as unknown as Blob);
+
+        const fileRes = await uploadPhotos(formData);
+      }
+    } catch (errors) {
+      if (axios.isAxiosError(errors)) {
+        console.log(errors.response?.data.message);
+        toaster("error", errors.response?.data.message);
+      }
     }
   };
 

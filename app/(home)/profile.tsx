@@ -14,12 +14,14 @@ import { Center } from "@/components/ui/center";
 import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
 import { Alert, Pressable } from "react-native";
-import { Upload } from "lucide-react-native";
+import { Mail, Newspaper, Phone, Upload, User } from "lucide-react-native";
 import * as ImagePicker from "expo-image-picker";
 import { uploadPhotos } from "@/service/media.service";
 import axios, { HttpStatusCode } from "axios";
 import useToaster from "@/hooks/useToaster";
 import { updateProfile } from "@/features/user/service/user.service";
+import ProfileHeader from "@/features/profile/components/profile-header";
+import InfoSlide from "@/features/profile/components/info-slide";
 
 type ProfileProps = {};
 
@@ -43,8 +45,6 @@ const Profile = (props: ProfileProps) => {
 
       if (!result.canceled) {
         const formData = new FormData();
-
-        console.log(result.assets[0].uri.split("/").pop());
 
         formData.append("file", {
           uri: result.assets[0].uri,
@@ -88,12 +88,13 @@ const Profile = (props: ProfileProps) => {
 
   return (
     <Container>
+      <ProfileHeader />
       <VStack className="justify-between h-full">
         {/* Profile */}
         <VStack className="mt-10">
           <Center className="gap-2">
-            <Avatar size="xl">
-              <AvatarFallbackText>Jane Doe</AvatarFallbackText>
+            <Avatar size="2xl">
+              <AvatarFallbackText>{profile.username}</AvatarFallbackText>
               <AvatarImage
                 source={
                   profile?.picture
@@ -123,9 +124,27 @@ const Profile = (props: ProfileProps) => {
               <Text className="font-body text-sm">{profile.email}</Text>
             </Center>
           </Center>
+
+          <VStack className="mt-5">
+            <InfoSlide
+              icon={Newspaper}
+              title={"This user hasn't added a bio yet."}
+            />
+            <InfoSlide icon={User} title={profile.username as string} />
+            <InfoSlide icon={Mail} title={profile.email as string} />
+            <InfoSlide icon={Phone} title={"Add your phone number"} />
+          </VStack>
         </VStack>
         {/* Sign Out */}
         <Box>
+          <Center>
+            <Text className="text-sm font-light">
+              Joined on{" "}
+              {new Date().toLocaleString("default", { month: "long" }) + " "}
+              {new Date().getDate() + " "}
+              {new Date().getFullYear()}
+            </Text>
+          </Center>
           <Button
             onPress={logout}
             variant="solid"

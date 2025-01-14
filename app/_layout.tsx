@@ -52,3 +52,5 @@ export default function RootLayout() {
     </GluestackUIProvider>
   );
 }
+
+// index file should be change to login screen

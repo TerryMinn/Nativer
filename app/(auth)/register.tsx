@@ -12,6 +12,7 @@ import useAuthStore from "@/features/user/store/useAuthStore";
 import { IRegister } from "@/features/user/types/user.type";
 import { registerSchema } from "@/features/user/utils/schema";
 import useToaster from "@/hooks/useToaster";
+import { withErrorHandling } from "@/utils/error-handler";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios, { HttpStatusCode } from "axios";
 import { router } from "expo-router";
@@ -36,24 +37,19 @@ const Register = () => {
     resolver: zodResolver(registerSchema),
   });
   const { toaster } = useToaster();
-
   const selectedValues = watch("accept_rule", []);
 
   const onSubmit = async (data: IRegister) => {
     setLoading(true);
-    try {
+    withErrorHandling(async () => {
       const raw = await registerService(data);
       if ((raw.data.statusCode = HttpStatusCode.Created)) {
         router.replace("/login");
         toaster("success", "Account created successfully");
       }
-    } catch (errors) {
-      if (axios.isAxiosError(errors)) {
-        toaster("error", errors.response?.data.message);
-      }
-    } finally {
+    }, toaster).finally(() => {
       setLoading(false);
-    }
+    });
   };
 
   return (

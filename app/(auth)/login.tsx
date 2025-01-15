@@ -16,9 +16,10 @@ import { router } from "expo-router";
 import KeyboardAvoidingBox from "@/components/keyboard-avoiding-box";
 import { loginService } from "@/features/user/service/auth.service";
 import colors from "tailwindcss/colors";
-import axios, { HttpStatusCode } from "axios";
+import { HttpStatusCode } from "axios";
 import useToaster from "@/hooks/useToaster";
 import useAuthStore from "@/features/user/store/useAuthStore";
+import { withErrorHandling } from "@/utils/error-handler";
 
 const Login = () => {
   const { setSession } = useAuthStore();
@@ -36,7 +37,7 @@ const Login = () => {
 
   const onSubmit = async (data: ILogin) => {
     setLoading(true);
-    try {
+    withErrorHandling(async () => {
       const raw = await loginService(data);
       if (raw.data.statusCode === HttpStatusCode.Created) {
         const {
@@ -54,14 +55,9 @@ const Login = () => {
         });
         router.replace("/(home)");
       }
-    } catch (errors) {
-      console.log(errors);
-      if (axios.isAxiosError(errors)) {
-        toaster("error", errors.response?.data.message);
-      }
-    } finally {
+    }, toaster).finally(() => {
       setLoading(false);
-    }
+    });
   };
 
   return (

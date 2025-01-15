@@ -21,6 +21,7 @@ import useToaster from "@/hooks/useToaster";
 import { updateProfile } from "@/features/user/service/user.service";
 import ProfileHeader from "@/features/profile/components/profile-header";
 import InfoSlide from "@/features/profile/components/info-slide";
+import { withErrorHandling } from "@/utils/error-handler";
 
 type ProfileProps = {};
 
@@ -34,55 +35,60 @@ const Profile = (props: ProfileProps) => {
 
   const handlePickImage = async () => {
     setIsLoading(true);
-    try {
-      let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ["images", "videos"],
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-      });
+    withErrorHandling(
+      async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ["images", "videos"],
+          allowsEditing: true,
+          aspect: [4, 3],
+          quality: 1,
+        });
 
-      if (!result.canceled) {
-        const formData = new FormData();
+        if (!result.canceled) {
+          const formData = new FormData();
 
-        formData.append("file", {
-          uri: result.assets[0].uri,
-          type: result.assets[0].type,
-          name: result.assets[0].uri.split("/").pop(),
-        } as unknown as Blob);
+          formData.append("file", {
+            uri: result.assets[0].uri,
+            type: result.assets[0].type,
+            name: result.assets[0].uri.split("/").pop(),
+          } as unknown as Blob);
 
-        const { data } = await uploadPhotos(formData);
+          const { data } = await uploadPhotos(formData);
 
-        if (data.statusCode === HttpStatusCode.Ok) {
-          // @TODO: gender and dateofbirth for profile setting up
-          const profile = {
-            // gender: session.profile.gender,
-            // date_of_birth: session.profile.date_of_birth,
-            picture: data.data.original,
-          };
+          if (data.statusCode === HttpStatusCode.Ok) {
+            // @TODO: gender and dateofbirth for profile setting up
+            const profile = {
+              // gender: session.profile.gender,
+              // date_of_birth: session.profile.date_of_birth,
+              picture: data.data.original,
+            };
 
-          const res = await updateProfile({ profile });
+            const res = await updateProfile({ profile });
 
-          if (res.data.statusCode === HttpStatusCode.Created) {
-            setSession({
-              ...session,
-              profile: {
-                ...session.profile,
-                picture: data.data.original,
-              },
-            });
-            toaster("success", "Profile updated successfully");
+            if (res.data.statusCode === HttpStatusCode.Created) {
+              setSession({
+                ...session,
+                profile: {
+                  ...session.profile,
+                  picture: data.data.original,
+                },
+              });
+              toaster("success", "Profile updated successfully");
+            }
+          }
+        }
+      },
+      toaster,
+      (error) => {
+        if (axios.isAxiosError(error)) {
+          if (error.response?.data.statusCode === HttpStatusCode.Unauthorized) {
+            logout();
           }
         }
       }
-    } catch (errors) {
-      if (axios.isAxiosError(errors)) {
-        console.log(errors.response?.data.message);
-        toaster("error", errors.response?.data.message);
-      }
-    } finally {
+    ).finally(() => {
       setIsLoading(false);
-    }
+    });
   };
 
   return (

@@ -1,3 +1,5 @@
+import { HttpStatusCode } from "axios";
+
 export interface ILogin {
   email: string;
   password: string;
@@ -23,5 +25,6 @@ export interface IProfile {
       };
       oauthProviders?: [];
     };
+    statusCode: HttpStatusCode;
   };
 }

@@ -6,7 +6,6 @@ import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
 import useAuthStore from "@/features/user/store/useAuthStore";
 import {
   Avatar,
-  AvatarBadge,
   AvatarFallbackText,
   AvatarImage,
 } from "@/components/ui/avatar";

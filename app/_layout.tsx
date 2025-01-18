@@ -14,7 +14,7 @@ import "react-native-reanimated";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { PrimaryFont, SecondaryFont } from "@/constants/Fonts";
 import useAuthStore from "@/features/user/store/useAuthStore";
-import { HttpStatusCode } from "axios";
+import React from "react";
 
 SplashScreen.preventAutoHideAsync();
 

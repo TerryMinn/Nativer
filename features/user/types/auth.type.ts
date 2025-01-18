@@ -6,6 +6,7 @@ export interface AuthStateI {
       picture: string | undefined;
       username: string | undefined;
       email: string | undefined;
+      created_at: string | undefined;
     };
   };
 }

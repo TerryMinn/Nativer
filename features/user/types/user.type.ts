@@ -22,6 +22,8 @@ export interface IProfile {
         picture?: string;
         gender?: string;
         date_of_birth?: string;
+        phone?: string;
+        bio?: string;
       };
       oauthProviders?: [];
     };

@@ -120,14 +120,18 @@ const Profile = (props: ProfileProps) => {
               Profile settings
             </Text>
             <VStack className="w-full  bg-white  rounded-lg">
-              <ProfileLink path="/profile" icon={User} title={"Account info"} />
               <ProfileLink
-                path="/profile"
+                path="/(profile)/account-info"
+                icon={User}
+                title={"Account info"}
+              />
+              <ProfileLink
+                path="/(profile)/password-edit"
                 icon={Lock}
                 title={"Password settings"}
               />
               <ProfileLink
-                path="/profile"
+                path="/(profile)/edit-info"
                 icon={Edit}
                 title="Edit info"
                 isDivider={false}
@@ -159,9 +163,11 @@ const Profile = (props: ProfileProps) => {
           <Center>
             <Text className="text-sm font-light">
               Joined on{" "}
-              {new Date().toLocaleString("default", { month: "long" }) + " "}
-              {new Date().getDate() + " "}
-              {new Date().getFullYear()}
+              {new Date(session.profile.created_at!).toLocaleString("default", {
+                month: "long",
+              }) + " "}
+              {new Date(session.profile.created_at!).getDate() + " "}
+              {new Date(session.profile.created_at!).getFullYear()}
             </Text>
           </Center>
           <Button

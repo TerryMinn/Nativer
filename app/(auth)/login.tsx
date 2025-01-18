@@ -41,9 +41,11 @@ const Login = () => {
       const raw = await loginService(data);
       if (raw.data.statusCode === HttpStatusCode.Created) {
         const {
-          user: { profile, name, email },
+          user: { profile, name, email, createdAt },
           token,
         } = raw.data.data;
+
+        console.log(raw.data.data);
         setSession({
           isAuth: true,
           token: token,
@@ -51,6 +53,7 @@ const Login = () => {
             picture: profile.picture,
             username: name,
             email: email,
+            created_at: createdAt,
           },
         });
         router.replace("/(home)");

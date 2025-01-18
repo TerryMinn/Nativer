@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Container from "@/components/container";
 import { VStack } from "@/components/ui/vstack";
 import { Box } from "@/components/ui/box";
-import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
+import { Button, ButtonText } from "@/components/ui/button";
 import useAuthStore from "@/features/user/store/useAuthStore";
 import {
   Avatar,
@@ -12,16 +12,25 @@ import {
 import { Center } from "@/components/ui/center";
 import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
-import { Alert, Pressable } from "react-native";
-import { Mail, Newspaper, Phone, Upload, User } from "lucide-react-native";
+import {
+  AlertCircle,
+  Edit,
+  FileText,
+  Lock,
+  Mail,
+  Newspaper,
+  Phone,
+  Upload,
+  User,
+} from "lucide-react-native";
 import * as ImagePicker from "expo-image-picker";
 import { uploadPhotos } from "@/service/media.service";
 import axios, { HttpStatusCode } from "axios";
 import useToaster from "@/hooks/useToaster";
 import { updateProfile } from "@/features/user/service/user.service";
 import ProfileHeader from "@/features/profile/components/profile-header";
-import InfoSlide from "@/features/profile/components/info-slide";
 import { withErrorHandling } from "@/utils/error-handler";
+import ProfileLink from "@/features/profile/components/profile-link";
 
 type ProfileProps = {};
 
@@ -107,7 +116,7 @@ const Profile = (props: ProfileProps) => {
                     : require("@/assets/images/user_placeholder.jpg")
                 }
               />
-              <Pressable
+              {/* <Pressable
                 onPress={handlePickImage}
                 className="absolute bottom-0 right-1"
               >
@@ -120,7 +129,7 @@ const Profile = (props: ProfileProps) => {
                     <Upload color={"black"} size={14} />
                   </Box>
                 )}
-              </Pressable>
+              </Pressable> */}
             </Avatar>
             <Center>
               <Heading className="font-heading text-3xl">
@@ -130,14 +139,43 @@ const Profile = (props: ProfileProps) => {
             </Center>
           </Center>
 
+          <VStack>
+            <Text className="font-semibold text-black text-lg mb-2">
+              Profile settings
+            </Text>
+            <VStack className="w-full  bg-white  rounded-lg">
+              <ProfileLink path="/profile" icon={User} title={"Account info"} />
+              <ProfileLink
+                path="/profile"
+                icon={Lock}
+                title={"Password settings"}
+              />
+              <ProfileLink
+                path="/profile"
+                icon={Edit}
+                title="Edit info"
+                isDivider={false}
+              />
+            </VStack>
+          </VStack>
+
           <VStack className="mt-5">
-            <InfoSlide
-              icon={Newspaper}
-              title={"This user hasn't added a bio yet."}
-            />
-            <InfoSlide icon={User} title={profile.username as string} />
-            <InfoSlide icon={Mail} title={profile.email as string} />
-            <InfoSlide icon={Phone} title={"Add your phone number"} />
+            <Text className="font-semibold text-black text-lg mb-2">
+              Other settings
+            </Text>
+            <VStack className="w-full  bg-white  rounded-lg">
+              <ProfileLink
+                path="/profile"
+                icon={AlertCircle}
+                title={"FAQ/Support"}
+              />
+              <ProfileLink
+                path="/profile"
+                icon={FileText}
+                title={"Terms and conditions"}
+                isDivider={false}
+              />
+            </VStack>
           </VStack>
         </VStack>
         {/* Sign Out */}

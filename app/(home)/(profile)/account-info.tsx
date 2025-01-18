@@ -8,7 +8,6 @@ import { IProfile } from "@/features/user/types/user.type";
 import { Box } from "@/components/ui/box";
 import { Image } from "@/components/ui/image";
 import { VStack } from "@/components/ui/vstack";
-import { Text } from "@/components/ui/text";
 import InfoSlide from "@/features/profile/components/info-slide";
 
 type AccountInfoProps = {};
@@ -16,13 +15,11 @@ type AccountInfoProps = {};
 const AccountInfo = (props: AccountInfoProps) => {
   const { isLoading, data } = useSWR<IProfile>("/user/profile", api_client);
 
-  if (isLoading) {
+  if (isLoading || !data) {
     return <Loading />;
   }
 
-  const {
-    data: { email, name, profile },
-  } = data!.data;
+  const { email, name, profile } = data!.data.data;
 
   return (
     <ProfileContainer>
@@ -43,6 +40,7 @@ const AccountInfo = (props: AccountInfoProps) => {
 
       <VStack className="mt-2 space-y-3">
         <InfoSlide label="Username" value={name} />
+        <InfoSlide label="Email" value={email} />
         <InfoSlide
           label="Phone"
           value={profile?.phone || "No phone number provided"}

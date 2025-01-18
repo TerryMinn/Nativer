@@ -39,7 +39,7 @@ const HomeLayout = ({}: HomeLayoutProps) => {
         }}
       />
       <Tabs.Screen
-        name="profile"
+        name="(profile)"
         options={{
           title: "Profile",
           tabBarIcon: ({ color, size }) => (

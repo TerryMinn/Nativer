@@ -12,17 +12,7 @@ import {
 import { Center } from "@/components/ui/center";
 import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
-import {
-  AlertCircle,
-  Edit,
-  FileText,
-  Lock,
-  Mail,
-  Newspaper,
-  Phone,
-  Upload,
-  User,
-} from "lucide-react-native";
+import { AlertCircle, Edit, FileText, Lock, User } from "lucide-react-native";
 import * as ImagePicker from "expo-image-picker";
 import { uploadPhotos } from "@/service/media.service";
 import axios, { HttpStatusCode } from "axios";
@@ -116,20 +106,6 @@ const Profile = (props: ProfileProps) => {
                     : require("@/assets/images/user_placeholder.jpg")
                 }
               />
-              {/* <Pressable
-                onPress={handlePickImage}
-                className="absolute bottom-0 right-1"
-              >
-                {isLoading ? (
-                  <Box className="bg-white p-3 rounded-full border border-gray-400">
-                    <ButtonSpinner size={1} />
-                  </Box>
-                ) : (
-                  <Box className="bg-white p-1 rounded-full border border-gray-400">
-                    <Upload color={"black"} size={14} />
-                  </Box>
-                )}
-              </Pressable> */}
             </Avatar>
             <Center>
               <Heading className="font-heading text-3xl">
@@ -139,7 +115,7 @@ const Profile = (props: ProfileProps) => {
             </Center>
           </Center>
 
-          <VStack>
+          <VStack className="mt-5">
             <Text className="font-semibold text-black text-lg mb-2">
               Profile settings
             </Text>

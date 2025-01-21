@@ -1,11 +1,11 @@
 import { z } from "zod";
 
 export const passwordEditSchema = z.object({
-  NewPassword: z
+  old_password: z
     .string()
     .min(8, { message: "Password must be at least 8 characters long." })
     .regex(/^.{8,}$/, { message: "Password must be at least 8 characters." }),
-  ConfirmPassword: z
+  new_password: z
     .string()
     .min(8, { message: "Password must be at least 8 characters long." })
     .regex(/^.{8,}$/, { message: "Password must be at least 8 characters." }),

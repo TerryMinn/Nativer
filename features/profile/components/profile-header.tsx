@@ -5,6 +5,7 @@ import React from "react";
 import { Pressable } from "react-native";
 import { HStack } from "@/components/ui/hstack";
 import { X } from "lucide-react-native";
+import { Box } from "@/components/ui/box";
 
 type ProfileHeaderProps = {
   main?: boolean;
@@ -34,9 +35,13 @@ const ProfileHeader = ({
           <X size={24} color={"black"} />
         </Pressable>
         <Text className="font-semibold text-black">{title}</Text>
-        <Pressable onPress={handleAction}>
-          <Text className="text-black">{btnText}</Text>
-        </Pressable>
+        {btnText ? (
+          <Pressable onPress={handleAction}>
+            <Text className="font-semibold text-black">{btnText}</Text>
+          </Pressable>
+        ) : (
+          <Box className="size-5" />
+        )}
       </HStack>
     );
   }

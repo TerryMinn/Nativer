@@ -10,7 +10,7 @@ import Header from "@/features/user/components/header";
 import { registerService } from "@/features/user/service/auth.service";
 import useAuthStore from "@/features/user/store/useAuthStore";
 import { IRegister } from "@/features/user/types/user.type";
-import { registerSchema } from "@/features/user/utils/schema";
+import { registerSchema } from "@/features/user/utils/user.schema";
 import useToaster from "@/hooks/useToaster";
 import { withErrorHandling } from "@/utils/error-handler";
 import { zodResolver } from "@hookform/resolvers/zod";

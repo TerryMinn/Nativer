@@ -1,4 +1,4 @@
 export interface IPasswordEdit {
-  ConfirmPassword: string;
-  NewPassword: string;
+  old_password: string;
+  new_password: string;
 }

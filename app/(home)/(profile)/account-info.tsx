@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ProfileContainer from "@/features/profile/components/profile-container";
 import ProfileHeader from "@/features/profile/components/profile-header";
 import useSWR from "swr";
@@ -9,11 +9,25 @@ import { Box } from "@/components/ui/box";
 import { Image } from "@/components/ui/image";
 import { VStack } from "@/components/ui/vstack";
 import InfoSlide from "@/features/profile/components/info-slide";
+import { HttpStatusCode, isAxiosError } from "axios";
+import useAuthStore from "@/features/user/store/useAuthStore";
 
 type AccountInfoProps = {};
 
 const AccountInfo = (props: AccountInfoProps) => {
-  const { isLoading, data } = useSWR<IProfile>("/user/profile", api_client);
+  const { logout } = useAuthStore();
+  const { isLoading, data, error } = useSWR<IProfile>(
+    "/user/profile",
+    api_client
+  );
+
+  useEffect(() => {
+    if (isAxiosError(error) && !isLoading) {
+      if (error.response?.data.statusCode === HttpStatusCode.Unauthorized) {
+        logout();
+      }
+    }
+  }, [error, isLoading]);
 
   if (isLoading || !data) {
     return <Loading />;

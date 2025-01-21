@@ -7,7 +7,7 @@ import { ILogin } from "@/features/user/types/user.type";
 import { VStack } from "@/components/ui/vstack";
 import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginSchema } from "@/features/user/utils/schema";
+import { loginSchema } from "@/features/user/utils/user.schema";
 import Input from "@/components/form/input";
 import { HStack } from "@/components/ui/hstack";
 import { Link, LinkText } from "@/components/ui/link";
@@ -45,7 +45,6 @@ const Login = () => {
           token,
         } = raw.data.data;
 
-        console.log(raw.data.data);
         setSession({
           isAuth: true,
           token: token,

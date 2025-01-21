@@ -20,7 +20,7 @@ const InputPassword = <T extends FieldValues>({
 
   return (
     <>
-      <Label labelText={label} />
+      <Label labelText={label} labelC={labelC} />
 
       <Controller
         name={name as Path<T>}

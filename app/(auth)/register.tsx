@@ -7,6 +7,7 @@ import { LinkText } from "@/components/ui/link";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
 import Header from "@/features/user/components/header";
+import { useRegisterMutate } from "@/features/user/hook/useAuthMutation";
 import { registerService } from "@/features/user/service/auth.service";
 import useAuthStore from "@/features/user/store/useAuthStore";
 import { IRegister } from "@/features/user/types/user.type";
@@ -21,36 +22,8 @@ import { useForm } from "react-hook-form";
 import colors from "tailwindcss/colors";
 
 const Register = () => {
-  const [loading, setLoading] = useState<boolean>(false);
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-    watch,
-  } = useForm<IRegister>({
-    defaultValues: {
-      first_name: "",
-      last_name: "",
-      email: "",
-      password: "",
-    },
-    resolver: zodResolver(registerSchema),
-  });
-  const { toaster } = useToaster();
-  const selectedValues = watch("accept_rule", []);
-
-  const onSubmit = async (data: IRegister) => {
-    setLoading(true);
-    withErrorHandling(async () => {
-      const raw = await registerService(data);
-      if ((raw.data.statusCode = HttpStatusCode.Created)) {
-        router.replace("/login");
-        toaster("success", "Account created successfully");
-      }
-    }, toaster).finally(() => {
-      setLoading(false);
-    });
-  };
+  const { control, errors, handleSubmit, loading, onSubmit, selectedValues } =
+    useRegisterMutate();
 
   return (
     <Container>

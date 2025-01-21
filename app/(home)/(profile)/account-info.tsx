@@ -1,33 +1,18 @@
-import React, { useEffect } from "react";
+import React from "react";
 import ProfileContainer from "@/features/profile/components/profile-container";
 import ProfileHeader from "@/features/profile/components/profile-header";
-import useSWR from "swr";
-import api_client from "@/service/api-service";
 import Loading from "@/components/loading";
-import { IProfile } from "@/features/user/types/user.type";
 import { Box } from "@/components/ui/box";
 import { Image } from "@/components/ui/image";
 import { VStack } from "@/components/ui/vstack";
 import InfoSlide from "@/features/profile/components/info-slide";
-import { HttpStatusCode, isAxiosError } from "axios";
-import useAuthStore from "@/features/user/store/useAuthStore";
+import { useProfileQuery } from "@/features/profile/hook/useProfileQuery";
+import { router } from "expo-router";
 
 type AccountInfoProps = {};
 
 const AccountInfo = (props: AccountInfoProps) => {
-  const { logout } = useAuthStore();
-  const { isLoading, data, error } = useSWR<IProfile>(
-    "/user/profile",
-    api_client
-  );
-
-  useEffect(() => {
-    if (isAxiosError(error) && !isLoading) {
-      if (error.response?.data.statusCode === HttpStatusCode.Unauthorized) {
-        logout();
-      }
-    }
-  }, [error, isLoading]);
+  const { data, isLoading } = useProfileQuery();
 
   if (isLoading || !data) {
     return <Loading />;
@@ -37,7 +22,14 @@ const AccountInfo = (props: AccountInfoProps) => {
 
   return (
     <ProfileContainer>
-      <ProfileHeader main={false} title="Account Info" btnText="Edit" />
+      <ProfileHeader
+        main={false}
+        title="Account Info"
+        btnText="Edit"
+        handleAction={() => {
+          router.push("/(home)/(profile)/edit-info");
+        }}
+      />
 
       <Box className="w-full max-h-[230px] mt-7">
         <Image
@@ -59,13 +51,10 @@ const AccountInfo = (props: AccountInfoProps) => {
           label="Phone"
           value={profile?.phone || "No phone number provided"}
         />
-        <InfoSlide
-          label="Date Of Birth"
-          value={profile?.date_of_birth || "No date of birth number provided"}
-        />
+
         <InfoSlide
           label="Bio"
-          value={profile?.date_of_birth || "No date of birth number provided"}
+          value={profile?.bio || "No date of birth number provided"}
           area={true}
         />
       </VStack>

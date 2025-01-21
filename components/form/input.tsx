@@ -4,10 +4,11 @@ import { FormControl } from "../ui/form-control";
 import InputText from "./factory/input.text";
 import InputPassword from "./factory/input.password";
 import InputCheckbox from "./factory/input.checkbox";
+import InputTextarea from "./factory/input.textarea";
 
 // Make FormProps generic
 export type FormProps<T extends FieldValues = FieldValues> = {
-  type?: "text" | "password" | "email" | "checkbox";
+  type?: "text" | "password" | "email" | "checkbox" | "textarea";
   label?: string;
   errors: FieldErrors<T>;
   control?: Control<T>;
@@ -18,6 +19,10 @@ export type FormProps<T extends FieldValues = FieldValues> = {
     labelC?: string;
     errorC?: string;
     containerC?: string;
+  };
+  areaProps?: {
+    des?: string;
+    count_limit?: number;
   };
 };
 
@@ -33,6 +38,8 @@ const Input = <T extends FieldValues>({
         return <InputPassword {...props} />;
       case "checkbox":
         return <InputCheckbox {...props} />;
+      case "textarea":
+        return <InputTextarea {...props} />;
       default:
         return <InputText {...props} />;
     }

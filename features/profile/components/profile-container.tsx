@@ -1,6 +1,7 @@
 import React, { useCallback } from "react";
 import Container from "@/components/container";
 import { useFocusEffect, useNavigation } from "expo-router";
+import { ScrollView, StyleSheet } from "react-native";
 
 type ProfileContainerProps = {
   children: React.ReactNode;
@@ -30,7 +31,18 @@ const ProfileContainer = ({ children }: ProfileContainerProps) => {
     }, [navigation])
   );
 
-  return <Container>{children}</Container>;
+  return (
+    <Container>
+      <ScrollView
+        alwaysBounceHorizontal={false}
+        alwaysBounceVertical={false}
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+      >
+        {children}
+      </ScrollView>
+    </Container>
+  );
 };
 
 export default ProfileContainer;

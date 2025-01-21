@@ -6,12 +6,14 @@ import { Pressable } from "react-native";
 import { HStack } from "@/components/ui/hstack";
 import { X } from "lucide-react-native";
 import { Box } from "@/components/ui/box";
+import { ButtonSpinner } from "@/components/ui/button";
 
 type ProfileHeaderProps = {
   main?: boolean;
   title?: string;
   btnText?: string;
   handleAction?: () => void;
+  isLoading?: boolean;
 };
 
 const ProfileHeader = ({
@@ -19,6 +21,7 @@ const ProfileHeader = ({
   title,
   btnText,
   handleAction,
+  isLoading,
 }: ProfileHeaderProps) => {
   if (main) {
     return (
@@ -37,7 +40,11 @@ const ProfileHeader = ({
         <Text className="font-semibold text-black">{title}</Text>
         {btnText ? (
           <Pressable onPress={handleAction}>
-            <Text className="font-semibold text-black">{btnText}</Text>
+            {isLoading ? (
+              <ButtonSpinner />
+            ) : (
+              <Text className="font-semibold text-black">{btnText}</Text>
+            )}
           </Pressable>
         ) : (
           <Box className="size-5" />

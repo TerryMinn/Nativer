@@ -1,67 +1,20 @@
-import React, { useState } from "react";
+import React from "react";
 import Container from "@/components/container";
 import Header from "@/features/user/components/header";
 import { Heading } from "@/components/ui/heading";
-import { useForm } from "react-hook-form";
-import { ILogin } from "@/features/user/types/user.type";
 import { VStack } from "@/components/ui/vstack";
 import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { loginSchema } from "@/features/user/utils/user.schema";
 import Input from "@/components/form/input";
 import { HStack } from "@/components/ui/hstack";
 import { Link, LinkText } from "@/components/ui/link";
 import { Text } from "@/components/ui/text";
 import { router } from "expo-router";
 import KeyboardAvoidingBox from "@/components/keyboard-avoiding-box";
-import { loginService } from "@/features/user/service/auth.service";
 import colors from "tailwindcss/colors";
-import { HttpStatusCode } from "axios";
-import useToaster from "@/hooks/useToaster";
-import useAuthStore from "@/features/user/store/useAuthStore";
-import { withErrorHandling } from "@/utils/error-handler";
+import { useLoginMutate } from "@/features/user/hook/useAuthMutation";
 
 const Login = () => {
-  const { setSession } = useAuthStore();
-  const [loading, setLoading] = useState<boolean>(false);
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<ILogin>({
-    defaultValues: { email: "", password: "" },
-    resolver: zodResolver(loginSchema),
-  });
-
-  const { toaster } = useToaster();
-
-  const onSubmit = async (data: ILogin) => {
-    setLoading(true);
-    withErrorHandling(async () => {
-      const raw = await loginService(data);
-      if (raw.data.statusCode === HttpStatusCode.Created) {
-        const {
-          user: { profile, name, email, createdAt },
-          token,
-        } = raw.data.data;
-
-        setSession({
-          isAuth: true,
-          token: token,
-          profile: {
-            picture: profile.picture,
-            username: name,
-            email: email,
-            created_at: createdAt,
-          },
-        });
-        router.replace("/(home)");
-      }
-    }, toaster).finally(() => {
-      setLoading(false);
-    });
-  };
-
+  const { control, errors, handleSubmit, loading, onSubmit } = useLoginMutate();
   return (
     <Container>
       <KeyboardAvoidingBox>

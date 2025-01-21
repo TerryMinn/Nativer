@@ -1,58 +1,17 @@
-import React, { useState } from "react";
+import React from "react";
 import ProfileContainer from "@/features/profile/components/profile-container";
 import ProfileHeader from "@/features/profile/components/profile-header";
 import { VStack } from "@/components/ui/vstack";
-import { useForm } from "react-hook-form";
-import { IPasswordEdit } from "@/features/profile/types/profile.type";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { passwordEditSchema } from "@/features/profile/utils/profile.schema";
 import Input from "@/components/form/input";
 import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
 import KeyboardAvoidingBox from "@/components/keyboard-avoiding-box";
-import { Alert } from "react-native";
-import { changePassword } from "@/features/profile/service/profile.service";
-import { HttpStatusCode, isAxiosError } from "axios";
-import useToaster from "@/hooks/useToaster";
-import useAuthStore from "@/features/user/store/useAuthStore";
-import { router } from "expo-router";
+import { usePasswordEdit } from "@/features/profile/hook/useProfileMutate";
 
 type PasswordEditProps = {};
 
 const PasswordEdit = (props: PasswordEditProps) => {
-  const { toaster } = useToaster();
-  const { logout } = useAuthStore();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<IPasswordEdit>({
-    defaultValues: { new_password: "", old_password: "" },
-    resolver: zodResolver(passwordEditSchema),
-  });
-
-  const onSubmit = async (data: IPasswordEdit) => {
-    setIsLoading(true);
-    try {
-      const res = await changePassword(data);
-      console.log(res.data);
-      if (res.data.statusCode === HttpStatusCode.Created) {
-        router.back();
-      }
-    } catch (e) {
-      if (isAxiosError(e)) {
-        if (e.response?.data.statusCode === HttpStatusCode.BadRequest) {
-          toaster("error", e.response?.data.message);
-        } else if (
-          e.response?.data.statusCode === HttpStatusCode.Unauthorized
-        ) {
-          logout();
-        }
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  const { control, errors, handleSubmit, isLoading, onSubmit } =
+    usePasswordEdit();
 
   return (
     <ProfileContainer>

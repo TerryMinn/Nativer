@@ -26,69 +26,8 @@ type ProfileProps = {};
 
 const Profile = (props: ProfileProps) => {
   const { logout, session, setSession } = useAuthStore();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const { profile } = session;
-
-  const { toaster } = useToaster();
-
-  const handlePickImage = async () => {
-    setIsLoading(true);
-    withErrorHandling(
-      async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
-          mediaTypes: ["images", "videos"],
-          allowsEditing: true,
-          aspect: [4, 3],
-          quality: 1,
-        });
-
-        if (!result.canceled) {
-          const formData = new FormData();
-
-          formData.append("file", {
-            uri: result.assets[0].uri,
-            type: result.assets[0].type,
-            name: result.assets[0].uri.split("/").pop(),
-          } as unknown as Blob);
-
-          const { data } = await uploadPhotos(formData);
-
-          if (data.statusCode === HttpStatusCode.Ok) {
-            // @TODO: gender and dateofbirth for profile setting up
-            const profile = {
-              // gender: session.profile.gender,
-              // date_of_birth: session.profile.date_of_birth,
-              picture: data.data.original,
-            };
-
-            const res = await updateProfile({ profile });
-
-            if (res.data.statusCode === HttpStatusCode.Created) {
-              setSession({
-                ...session,
-                profile: {
-                  ...session.profile,
-                  picture: data.data.original,
-                },
-              });
-              toaster("success", "Profile updated successfully");
-            }
-          }
-        }
-      },
-      toaster,
-      (error) => {
-        if (axios.isAxiosError(error)) {
-          if (error.response?.data.statusCode === HttpStatusCode.Unauthorized) {
-            logout();
-          }
-        }
-      }
-    ).finally(() => {
-      setIsLoading(false);
-    });
-  };
 
   return (
     <Container>

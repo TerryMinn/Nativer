@@ -9,10 +9,11 @@ import { changePassword, editInfo } from "../service/profile.service";
 import { router } from "expo-router";
 import { HttpStatusCode, isAxiosError } from "axios";
 import { useProfileQuery } from "./useProfileQuery";
-import { Alert } from "react-native";
 import { withErrorHandling } from "@/utils/error-handler";
 import { uploadPhotos } from "@/service/media.service";
 import * as ImagePicker from "expo-image-picker";
+import { useSWRConfig } from "swr";
+import { HOST } from "@/constants/Service";
 
 export const usePasswordEdit = () => {
   const ploice = useProfileQuery();
@@ -35,6 +36,7 @@ export const usePasswordEdit = () => {
         const res = await changePassword(data);
         console.log(res.data);
         if (res.data.statusCode === HttpStatusCode.Created) {
+          toaster("success", "Password changed successfully");
           router.back();
         }
       },
@@ -64,6 +66,7 @@ export const usePasswordEdit = () => {
 
 export const useInfoEdit = () => {
   const { logout } = useAuthStore();
+  const { mutate } = useSWRConfig();
   const { data, isLoading: ProfileLoading } = useProfileQuery();
   const { toaster } = useToaster();
   const { setSession, session } = useAuthStore();
@@ -102,6 +105,7 @@ export const useInfoEdit = () => {
 
         const res = await editInfo(payload);
         if (res.data.statusCode === HttpStatusCode.Created) {
+          mutate(HOST + "/user/profile");
           router.back();
           setSession({
             ...session,
@@ -110,6 +114,7 @@ export const useInfoEdit = () => {
               picture: data.picture,
             },
           });
+          toaster("success", "Profile updated successfully");
         }
       },
       toaster,

@@ -6,6 +6,7 @@ import Input from "@/components/form/input";
 import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
 import KeyboardAvoidingBox from "@/components/keyboard-avoiding-box";
 import { usePasswordEdit } from "@/features/profile/hook/useProfileMutate";
+import { Box } from "@/components/ui/box";
 
 type PasswordEditProps = {};
 
@@ -18,7 +19,7 @@ const PasswordEdit = (props: PasswordEditProps) => {
       <KeyboardAvoidingBox>
         <ProfileHeader main={false} title="Change Password" />
 
-        <VStack className="flex-1 justify-between py-5">
+        <Box className="flex-1 justify-between py-5 h-full ">
           <VStack className="mt-7" space="xl">
             <Input
               errors={errors}
@@ -45,7 +46,7 @@ const PasswordEdit = (props: PasswordEditProps) => {
             <ButtonText>Save</ButtonText>
             {isLoading && <ButtonSpinner />}
           </Button>
-        </VStack>
+        </Box>
       </KeyboardAvoidingBox>
     </ProfileContainer>
   );

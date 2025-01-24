@@ -1,10 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import ProfileContainer from "@/features/profile/components/profile-container";
 import ProfileHeader from "@/features/profile/components/profile-header";
 import KeyboardAvoidingBox from "@/components/keyboard-avoiding-box";
-import { Box } from "lucide-react-native";
-import { useProfileQuery } from "@/features/profile/hook/useProfileQuery";
-import Loading from "@/components/loading";
 import { Image } from "@/components/ui/image";
 import { VStack } from "@/components/ui/vstack";
 import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
@@ -14,12 +11,7 @@ import {
   usePictureMutate,
 } from "@/features/profile/hook/useProfileMutate";
 import Input from "@/components/form/input";
-import * as ImagePicker from "expo-image-picker";
-import { withErrorHandling } from "@/utils/error-handler";
-import { uploadPhotos } from "@/service/media.service";
-import axios, { HttpStatusCode } from "axios";
-import useToaster from "@/hooks/useToaster";
-import useAuthStore from "@/features/user/store/useAuthStore";
+import Loading from "@/components/loading";
 
 type EditInfoProps = {};
 
@@ -29,10 +21,6 @@ const EditInfo = (props: EditInfoProps) => {
   const { handlePickImage, tempImg, isUploadLoading } =
     usePictureMutate(setValue);
 
-  if (isLoading || !data) {
-    return <Loading />;
-  }
-
   return (
     <ProfileContainer>
       <KeyboardAvoidingBox>
@@ -41,6 +29,7 @@ const EditInfo = (props: EditInfoProps) => {
           title="Edit Info"
           btnText="Save"
           handleAction={handleSubmit(onSubmit)}
+          isLoading={isUploadLoading}
         />
 
         <VStack className="w-full max-h-[230px] mt-7 relative">

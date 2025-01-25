@@ -1,8 +1,8 @@
 import { create } from "zustand";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { persist } from "zustand/middleware";
 import { AuthI } from "../types/auth.type";
 import { AUTH_STORE } from "@/constants/Service";
+import { storage } from "@/utils/storage";
 
 const useAuthStore = create(
   persist<AuthI>(
@@ -35,15 +35,15 @@ const useAuthStore = create(
     {
       name: AUTH_STORE,
       storage: {
-        getItem: async (name) => {
-          const item = await AsyncStorage.getItem(name);
-          return item ? JSON.parse(item) : null;
+        getItem: (name) => {
+          const value = storage.getString(name);
+          return value ? JSON.parse(value) : null;
         },
-        setItem: async (name, value) => {
-          await AsyncStorage.setItem(name, JSON.stringify(value));
+        setItem: (name, value) => {
+          storage.set(name, JSON.stringify(value));
         },
-        removeItem: async (name) => {
-          await AsyncStorage.removeItem(name);
+        removeItem: (name) => {
+          storage.delete(name);
         },
       },
     }

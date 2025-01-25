@@ -14,8 +14,10 @@ export async function withErrorHandling<T>(
     }
 
     if (axios.isAxiosError(error)) {
+      console.log(error, "error with axios");
       toaster("error", error.response?.data.message || "An error occurred");
     } else {
+      console.log(error, "error with error handler");
       toaster("error", "An unexpected error occurred");
     }
   }

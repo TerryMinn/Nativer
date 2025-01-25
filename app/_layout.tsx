@@ -27,6 +27,10 @@ export default function RootLayout() {
     ...PrimaryFont,
   });
 
+  if (__DEV__) {
+    require("../reactotron.config");
+  }
+
   useEffect(() => {
     if (loaded) {
       if (!session.isAuth) {

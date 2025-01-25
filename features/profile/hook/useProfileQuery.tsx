@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import useSWR from "swr";
 
 export const useProfileQuery = () => {
-  const { logout, session } = useAuthStore();
+  const { logout } = useAuthStore();
   const { isLoading, data, error } = useSWR<IProfile>(
     "/user/profile",
     api_client
@@ -19,6 +19,8 @@ export const useProfileQuery = () => {
       }
     }
   }, [error, isLoading]);
+
+  console.log(data, error, isLoading, "in profile query");
 
   return {
     isLoading,

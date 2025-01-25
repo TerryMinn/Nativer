@@ -17,10 +17,10 @@ const KeyboardAvoidingBox = ({ children }: KeyboardAvoidingBoxProps) => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      className="flex-1"
+      className="flex-1 "
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View className="flex-1">{children}</View>
+        <View className="flex-1 ">{children}</View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   );
